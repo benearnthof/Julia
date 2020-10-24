@@ -172,3 +172,53 @@ x > y ? x : y
 
 # Functions: 
 # Duck-typing, mutating vs. non-mutating functions, higher order functions
+
+# we can declare functions in julia using the function and end keywords
+function add(x, y)
+    x + y
+end
+
+# the return keyword is always an option
+
+# alternatively we can declare functions in a single line
+square(x) = x^2
+square(13)
+
+# finally we can declare functions anonymously "lambda"
+(firstname, lastname) -> println("Hi $firstname $lastname , it's great to see you!")
+# we can also bind anonymous functions to variables 
+f2 = x -> x^2
+f2(4)
+
+# Duck-typing in Julia: 
+# functions will just work on whatever inputs make sense 
+A = rand(3,3)
+square(A)
+square("hi")
+# BUT: this will not work on a vector. Because vector products have multiple interpretations
+
+# Mutating functions alter the state of their input arguments
+# non-mutating functions do not do this
+v = [3,5,2]
+sort(v)
+v
+sort!(v)
+v
+# the sort bang function is a mutating function
+
+# Higher order functions take other functions as their input arguments
+# a classic argument is the map function 
+map(square, [1,2,3])
+map(x -> x^3, [1,2,3])
+
+# broadcast is another higher order function like map. broadcast is a generalization of map, so it can do everything 
+# map can do and more. The syntax for calling broadcast is the same as for calling map
+broadcast(square, [1,2,3])
+# broadcast matches vector lengths similar to Rs recycle behaviour
+square.([1,2,3])
+# the dot syntax is a shorthand for broadcast
+# The dot syntax allows us to write relatively complex compound expressions in a way that is mathematically intuitive
+A .+ 2 .* square.(A) ./ A
+# instead of 
+broadcast(x -> x + 2 * square(x) / x, A)
+
