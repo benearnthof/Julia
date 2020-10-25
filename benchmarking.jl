@@ -78,3 +78,18 @@ numpy_sum = pyimport("numpy")["sum"]
 py_numpy_bench = @benchmark $numpy_sum($a)
 d["py_numpy"] = minimum(py_numpy_bench.times) / 1e6
 
+# builtin julia
+j_bench = @benchmark sum($a)
+d["Julia_builtin"] = minimum(j_bench.times) / 1e6
+
+# julia hand written with single instruction multiple data (SIMD)
+function mysum_simd(A)
+    s = 0.0
+    @simd for a in A
+        s += a
+    end
+    s
+end
+
+j_bench_simd = @benchmark mysum_simd($a)
+d["julia_simd"] = minimum(j_bench_simd.times) / 1e6
